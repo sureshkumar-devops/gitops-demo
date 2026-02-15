@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-app
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: gitops-app=gitops-app
+    argocd-image-updater.argoproj.io/gitops-app.update-strategy: latest
+    argocd-image-updater.argoproj.io/write-back-method: git
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/sureshkumar-devops/gitops-demo    
+    targetRevision: master
+    path: app
+    kustomize: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
