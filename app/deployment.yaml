@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: gitops-demo
-          image: lehardocker/gitops-demo:1.0.0
+          image: lehardocker/gitops-demo:1.0.1
           ports:
             - containerPort: 3000
 

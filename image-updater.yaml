@@ -1,0 +1,29 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: app-img-update-updater
+spec:
+  namespace: argocd
+  commonUpdateSettings:
+    updateStrategy: "semver"        # Default: "semver"
+    forceUpdate: false              # Default: false
+    allowTags: "regexp:^v[0-9]+\\.[0-9]+\\.[0-9]+$"  # Default: all tags
+    ignoreTags: [ "latest", "dev" ]   # Default: no tags ignored
+    pullSecret: ""                  # Default: no pull secret
+    platforms: [ ]                   # Default: no platform restrictions
+  writeBackConfig:
+    method: "argocd"      
+  applicationRefs:
+    - namePattern: "*"
+      commonUpdateSettings:
+         updateStrategy: "latest"
+         forceUpdate: true
+      writeBackConfig:
+        method: git
+        gitConfig:
+          repository: git@github.com:sureshkumar-devops/gitops-demo.git
+          branch: master
+      images:
+        - alias: "app"
+          imageName: "lehardocker/gitops-demo:1.0.6"
+
